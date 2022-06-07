@@ -51,3 +51,7 @@ $ mvn compile jib:dockerBuild # local docker daemon
 $ docker-compose -f deployment/docker-compose.yaml up
 ```
 
+# Containerizing Java App
+Some useful links: 
+* [Java containerization strategies](https://docs.microsoft.com/en-us/azure/developer/java/containers)
+* [Best practices for Java in single-core containers](https://developers.redhat.com/articles/2022/04/19/best-practices-java-single-core-containers)
