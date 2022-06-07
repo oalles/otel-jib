@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>es.omarall</groupId>
+    <artifactId>otel-jib</artifactId>
+    <version>latest</version>
+    <name>otel-jib</name>
+    <description>otel-jib</description>
+    <properties>
+        <java.version>17</java.version>
+        <jib-maven-plugin.version>3.2.1</jib-maven-plugin.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals> <!-- dockerBuild - Local Docker daemon -->
+                            <!-- <goal>build</goal>-->
+                            <goal>dockerBuild</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--                    <to>-->
+                    <!--                        <image>${env.IMAGE_REGISTRY_URI}/${project.artifactId}:${project.version}</image>-->
+                    <!--                        <auth>-->
+                    <!--                            <username>${env.IMAGE_REGISTRY_USERNAME}</username>-->
+                    <!--                            <password>${env.IMAGE_REGISTRY_PASSWORD}</password>-->
+                    <!--                        </auth>-->
+                    <!--                    </to>-->
+                    <from>
+                        <image>gcr.io/distroless/java17-debian11</image>
+                    </from>
+                    <container>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                        <jvmFlags>
+                            <jvmFlag>-javaagent:/data/otel/opentelemetry-javaagent.jar</jvmFlag>
+                        </jvmFlags>
+                    </container>
+                    <extraDirectories>
+                        <paths>
+                            <!-- Copies from 'src/main/data' into '/data' on the container -->
+                            <path>
+                                <from>src/main/data</from>
+                                <into>/data</into>
+                            </path>
+                        </paths>
+                    </extraDirectories>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

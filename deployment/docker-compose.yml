@@ -1,0 +1,12 @@
+version: '3'
+services:
+  sample-app:
+    restart: unless-stopped
+    image: "otel-jib:latest"
+    ports:
+      - "8080:8080"
+    environment:
+      OTEL_METRICS_EXPORTER: none
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://172.26.105.109:4318"
+      OTEL_RESOURCE_ATTRIBUTES: service.name=sampleApp
